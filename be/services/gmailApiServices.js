@@ -171,7 +171,7 @@ async function searchEmails(auth, query = "", startDate, endDate) {
       threadId: msg.threadId,
       from,
       subject,
-      body: body.substring(0, 200) + "...",
+      body: body,
       attachments: attachments, // Add attachments to the result
     };
   });
