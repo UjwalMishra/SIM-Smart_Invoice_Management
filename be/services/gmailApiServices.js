@@ -103,17 +103,26 @@ async function getAttachments(auth, messageId, parts) {
 
 // fetches attachments in addition to email details.
 
-async function searchEmails(auth, query = "") {
+async function searchEmails(auth, query = "", startDate, endDate) {
   const gmail = google.gmail({ version: "v1", auth });
+
+  // --- Date Query Logic ---
+  let searchQuery = query;
+  if (startDate) {
+    searchQuery += ` after:${startDate}`;
+  }
+  if (endDate) {
+    searchQuery += ` before:${endDate}`;
+  }
+  // --- End Date Query Logic ---
 
   const listResponse = await gmail.users.messages.list({
     userId: "me",
-    q: query, // Use the provided search query
-    maxResults: 10, // Fetch up to 10 matching emails
+    q: searchQuery.trim(), // Use the combined search query
+    maxResults: 50, // Increased max results for broader date searches
   });
 
   const messages = listResponse.data.messages;
-
   if (!messages || messages.length === 0) {
     console.log("No messages found for this query.");
     return [];
@@ -121,11 +130,21 @@ async function searchEmails(auth, query = "") {
 
   // Fetch details for each message in parallel
   const emailPromises = messages.map(async (msg) => {
-    const messageContent = gmail.users.messages.get({
+    if (!msg || !msg.id) {
+      return null;
+    }
+    const messageContent = await gmail.users.messages.get({
       userId: "me",
       id: msg.id,
       format: "full",
     });
+
+    if (!messageContent || !messageContent.data) {
+      console.warn(
+        `Warning: Could not fetch content for message ID ${msg.id}. Skipping.`
+      );
+      return null;
+    }
 
     const payload = messageContent.data.payload;
     if (!payload || !payload.headers) return null;
