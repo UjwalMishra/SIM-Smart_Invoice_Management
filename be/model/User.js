@@ -11,6 +11,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    lastInvoiceSync: {
+      type: Date,
+    },
     name: {
       type: String,
     },
