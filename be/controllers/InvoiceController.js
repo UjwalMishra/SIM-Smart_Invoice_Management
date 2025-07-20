@@ -22,7 +22,7 @@ const processEmailsForInvoices = async (req, res) => {
   const isManualFetch = startDate && endDate;
 
   //will remove this line later on
-  endDate = "2025-01-01";
+  endDate = "2025-06-01";
 
   try {
     const oAuth2Client = createOAuthClient();

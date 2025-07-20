@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    googleSheetId: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,

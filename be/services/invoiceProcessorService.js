@@ -1,9 +1,9 @@
-// services/invoiceProcessorService.js
-
 const { google } = require("googleapis");
 const pdf = require("pdf-parse");
 const Invoice = require("../model/Invoice");
 const { extractInvoiceData } = require("./aiExtractorService");
+
+const { appendInvoiceToSheet } = require("./googleSheetsService");
 
 // Helper to get an authenticated Gmail instance
 const getGmailClient = (oAuth2Client) => {
@@ -71,9 +71,20 @@ const processInvoiceFromEmail = async (user, oAuth2Client, emailData) => {
       });
 
       await newInvoice.save();
+
       console.log(
         `Successfully processed and saved invoice #${newInvoice.metadata.number}`
       );
+
+      // 8. If the user has configured a sheet, append the data.
+      if (user.googleSheetId) {
+        await appendInvoiceToSheet(
+          oAuth2Client,
+          user.googleSheetId,
+          newInvoice
+        );
+      }
+
       return newInvoice;
     } catch (error) {
       console.error(
