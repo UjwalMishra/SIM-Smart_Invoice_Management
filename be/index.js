@@ -1,7 +1,7 @@
 const express = require("express");
-const session = require("express-session");
+const jwt = require("jsonwebtoken");
 const { google } = require("googleapis");
-
+const cors = require("cors");
 const gmailApiServices = require("./services/gmailApiServices");
 const DBConnect = require("./config/db");
 const User = require("./model/User");
@@ -12,16 +12,10 @@ require("dotenv").config();
 DBConnect();
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(express.json());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+app.use(cors());
 
 function createOAuthClient() {
   return new google.auth.OAuth2(
@@ -31,35 +25,37 @@ function createOAuthClient() {
   );
 }
 
+// --- NEW: JWT Authentication Middleware ---
+const authenticateToken = async (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token == null) return res.sendStatus(401); // if there isn't any token
+
+  jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+    if (err) return res.sendStatus(403);
+
+    try {
+      const userFromDb = await User.findById(user.id);
+      if (!userFromDb) {
+        return res.status(404).json({ message: "User not found." });
+      }
+      req.user = userFromDb;
+      next();
+    } catch (error) {
+      console.error("Error fetching user from DB in middleware:", error);
+      res.status(500).json({ message: "Internal server error." });
+    }
+  });
+};
+
 // --- ROUTES ---
 
 //home
 app.get("/", (req, res) => {
-  if (req.session.userId) {
-    res.send(`
-            <h1>Welcome!</h1>
-            <p>You are logged in.</p>
-            <form action="/api/emails" method="get" style="line-height: 2.5;">
-                <label for="q">Search Term:</label><br>
-                <input type="text" id="q" name="q" placeholder="e.g., from:somebody" size="50"/><br>
-
-                <label for="startDate">Start Date:</label><br>
-                <input type="date" id="startDate" name="startDate"><br>
-
-                <label for="endDate">End Date:</label><br>
-                <input type="date" id="endDate" name="endDate"><br>
-
-                <button type="submit">Search Emails</button>
-            </form>
-            <br>
-            <a href="/logout">Logout</a>
-        `);
-  } else {
-    res.send(
-      '<h1>Welcome to Gmail Reader</h1><a href="/auth/google">Login with Google</a>'
-    );
-  }
+  res.send("<h1>Welcome to Gmail Reader API</h1>");
 });
+
 // 1. Start the authentication process
 app.get("/auth/google", async (req, res) => {
   const oAuth2Client = await createOAuthClient();
@@ -97,20 +93,28 @@ app.get("/auth/google/callback", async (req, res) => {
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
-    req.session.userId = user._id;
-    res.redirect("/");
+    // Create JWT
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h", // Token expires in 1 hour
+    });
+
+    // res.json({
+    //   message: "Authentication successful!",
+    //   token: jwtToken,
+    //   user: {
+    //     name: user.name,
+    //     email: user.email,
+    //   },
+    // });
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${jwtToken}`);
   } catch (error) {
     console.error("Error during authentication:", error);
-    res.status(500).send("Authentication failed.");
+    // res.status(500).json({ message: "Authentication failed." });
+    res.redirect(`${process.env.FRONTEND_URL}/auth/error`);
   }
 });
 
-app.get("/api/emails", async (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).send("Unauthorized. Please login first.");
-  }
-
-  // Extract query and date parameters from the request
+app.get("/api/emails", authenticateToken, async (req, res) => {
   const searchQuery = req.query.q || "";
   const startDate = req.query.startDate
     ? req.query.startDate.replace(/-/g, "/")
@@ -120,10 +124,7 @@ app.get("/api/emails", async (req, res) => {
     : null;
 
   try {
-    const user = await User.findById(req.session.userId);
-    if (!user) {
-      return res.status(404).send("User not found in database.");
-    }
+    const user = req.user; // User is attached from the middleware
 
     const oAuth2Client = createOAuthClient();
     oAuth2Client.setCredentials({
@@ -131,7 +132,6 @@ app.get("/api/emails", async (req, res) => {
       refresh_token: user.refresh_token,
     });
 
-    // Pass the date parameters to the service function
     const emails = await gmailApiServices.searchEmails(
       oAuth2Client,
       searchQuery,
@@ -139,64 +139,25 @@ app.get("/api/emails", async (req, res) => {
       endDate
     );
 
-    // The rest of this route (rendering HTML) remains the same
-    let html = `<h1>Search Results</h1> <a href="/">Back to Search</a>`;
-    if (emails.length === 0) {
-      html += "<p>No emails found for your criteria.</p>";
-    } else {
-      html += emails
-        .map((email) => {
-          let attachmentsHtml = "No attachments";
-          if (email.attachments && email.attachments.length > 0) {
-            attachmentsHtml = "<ul>";
-            attachmentsHtml += email.attachments
-              .map((att) => {
-                const downloadUrl = `/api/download/attachment?messageId=${
-                  email.id
-                }&attachmentId=${
-                  att.attachmentId
-                }&filename=${encodeURIComponent(att.filename)}`;
-                return `<li><a href="${downloadUrl}">${
-                  att.filename
-                }</a> (${Math.round(att.size / 1024)} KB)</li>`;
-              })
-              .join("");
-            attachmentsHtml += "</ul>";
-          }
-
-          return `
-                <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-                    <p><b>From:</b> ${email.from}</p>
-                    <p><b>Subject:</b> ${email.subject}</p>
-                    <p><i>${email.body}</i></p>
-                    <p><b>Attachments:</b></p>
-                    ${attachmentsHtml}
-                </div>
-            `;
-        })
-        .join("");
-    }
-
-    res.send(html);
+    res.json(emails);
   } catch (error) {
     console.error("Failed to fetch emails:", error);
-    res.status(500).send("Error fetching emails.");
+    res.status(500).json({ message: "Error fetching emails." });
   }
 });
 
 //  ROUTE: For downloading a specific attachment
-app.get("/api/download/attachment", async (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).send("Unauthorized. Please login first.");
-  }
-
+app.get("/api/download/attachment", authenticateToken, async (req, res) => {
   const { messageId, attachmentId, filename } = req.query;
 
+  if (!messageId || !attachmentId || !filename) {
+    return res
+      .status(400)
+      .json({ message: "Missing required query parameters." });
+  }
+
   try {
-    const user = await User.findById(req.session.userId);
-    if (!user) {
-      return res.status(404).send("User not found in database.");
-    }
+    const user = req.user;
 
     const oAuth2Client = createOAuthClient();
     oAuth2Client.setCredentials({
@@ -214,21 +175,18 @@ app.get("/api/download/attachment", async (req, res) => {
 
     const fileData = Buffer.from(attachment.data.data, "base64");
 
-    // Set headers to trigger a download in the browser
     res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.setHeader(
+      "Content-Type",
+      attachment.data.mimeType || "application/octet-stream"
+    );
     res.setHeader("Content-Length", fileData.length);
 
-    // Send the file data
     res.send(fileData);
   } catch (error) {
     console.error("Failed to download attachment:", error);
-    res.status(500).send("Error downloading attachment.");
+    res.status(500).json({ message: "Error downloading attachment." });
   }
-});
-
-// logout
-app.get("/logout", (req, res) => {
-  req.session.destroy(() => res.redirect("/"));
 });
 
 app.listen(port, () => {
