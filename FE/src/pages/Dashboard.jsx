@@ -86,146 +86,210 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    navigate("/login");
+    navigate("/landing");
   };
 
   if (isLoading) {
     return <div className="text-center mt-20">Loading Dashboard...</div>;
   }
 
-  return (
-    <div className="container mx-auto p-8">
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Dashboard</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-        >
-          Logout
-        </button>
-      </header>
 
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-2xl font-semibold mb-4">
-          Google Sheets Integration
-        </h2>
-        <p className="text-gray-600 mb-4">
+
+
+
+return (
+ <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+  <div className="container mx-auto p-8 animate-fadeIn">
+    {/* Header remains the same, spanning the full width */}
+    <header className="flex justify-between items-center mb-12 animate-slideDown">
+      <div className="relative">
+        <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
+          Dashboard
+        </h1>
+        <div className="absolute -bottom-2 left-0 w-32 h-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full animate-pulse"></div>
+      </div>
+      <button
+        onClick={handleLogout}
+        className="group relative bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/25 animate-slideLeft"
+      >
+        <span className="relative z-10">Logout</span>
+        <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </button>
+    </header>
+
+    {/* --- NEW: Grid container for the layout --- */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* --- Card 1: Google Sheets Integration --- */}
+      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 p-6 rounded-2xl shadow-2xl animate-slideUp hover:shadow-blue-500/10 transition-all duration-300">
+        <div className="flex items-center mb-4">
+          <div className="w-8 h-8 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg mr-3 animate-pulse"></div>
+          <h2 className="text-2xl font-semibold text-white">
+            Google Sheets Integration
+          </h2>
+        </div>
+        <p className="text-gray-300 mb-6 leading-relaxed">
           Paste the ID of your Google Sheet below to automatically sync new
-          invoices. The ID is the long string in the middle of the sheet's URL.
+          invoices.
         </p>
         <div className="flex items-center gap-4">
-          <input
-            type="text"
-            placeholder="Enter Google Sheet ID"
-            value={sheetId}
-            onChange={(e) => setSheetId(e.target.value)}
-            className="flex-grow block w-full rounded-md border-gray-300 shadow-sm p-2"
-          />
+          <div className="relative flex-grow group">
+            <input
+              type="text"
+              placeholder="Enter Google Sheet ID"
+              value={sheetId}
+              onChange={(e) => setSheetId(e.target.value)}
+              className="w-full bg-gray-700/50 border border-gray-600/50 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 group-hover:bg-gray-700/70"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          </div>
           <button
             onClick={handleSaveSettings}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
           >
             Save
           </button>
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Process Invoices</h2>
-        <p className="text-gray-600 mb-4">
-          Click "Sync New Invoices" to automatically fetch invoices since your
-          last sync. Or, select a date range for a historical search.
+      {/* --- Card 2: Process Invoices --- */}
+      <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 p-6 rounded-2xl shadow-2xl animate-slideUp hover:shadow-purple-500/10 transition-all duration-300" style={{animationDelay: '0.1s'}}>
+        <div className="flex items-center mb-4">
+          <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg mr-3 animate-pulse"></div>
+          <h2 className="text-2xl font-semibold text-white">Process Invoices</h2>
+        </div>
+        <p className="text-gray-300 mb-6 leading-relaxed">
+          Sync new invoices or select a date range for a historical search.
         </p>
 
-        {/* --- NEW DATE INPUTS --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label
-              htmlFor="startDate"
-              className="block text-sm font-medium text-gray-700"
-            >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+          <div className="group">
+            <label htmlFor="startDate" className="block text-sm font-medium text-gray-300 mb-2">
               Start Date
             </label>
-            <input
-              type="date"
-              id="startDate"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
-            />
+            <div className="relative">
+              <input
+                type="date"
+                id="startDate"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full bg-gray-700/50 border border-gray-600/50 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-300 group-hover:bg-gray-700/70"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+            </div>
           </div>
-          <div>
-            <label
-              htmlFor="endDate"
-              className="block text-sm font-medium text-gray-700"
-            >
+          <div className="group">
+            <label htmlFor="endDate" className="block text-sm font-medium text-gray-300 mb-2">
               End Date
             </label>
-            <input
-              type="date"
-              id="endDate"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
-            />
+            <div className="relative">
+              <input
+                type="date"
+                id="endDate"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full bg-gray-700/50 border border-gray-600/50 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-300 group-hover:bg-gray-700/70"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+            </div>
           </div>
         </div>
 
         <button
           onClick={handleProcessEmails}
           disabled={isProcessing}
-          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded disabled:bg-gray-400"
+          className={`relative overflow-hidden bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-green-500/25 disabled:from-gray-600 disabled:to-gray-700 disabled:hover:scale-100 disabled:hover:shadow-none ${isProcessing ? 'animate-pulse' : ''}`}
         >
-          {isProcessing
-            ? "Processing..."
-            : startDate && endDate
-            ? "Process Date Range"
-            : "Sync New Invoices"}
+          <span className="relative z-10">
+            {isProcessing
+              ? "Processing..."
+              : startDate && endDate
+              ? "Process Date Range"
+              : "Sync New Invoices"}
+          </span>
+          {isProcessing && (
+            <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-emerald-400/20 animate-pulse"></div>
+          )}
         </button>
+
         {message && (
-          <p className="mt-4 text-blue-700 bg-blue-100 p-3 rounded">
-            {message}
-          </p>
+          <div className="mt-6 p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/30 text-blue-300 rounded-xl animate-fadeIn backdrop-blur-sm">
+            <div className="flex items-center">
+              <div className="w-4 h-4 bg-blue-400 rounded-full mr-3 animate-pulse"></div>
+              {message}
+            </div>
+          </div>
         )}
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold mb-4">Processed Invoices</h2>
+      {/* --- Card 3: Processed Invoices (Spans full width on large screens) --- */}
+      <div className="lg:col-span-2 bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 p-6 rounded-2xl shadow-2xl animate-slideUp hover:shadow-cyan-500/10 transition-all duration-300" style={{animationDelay: '0.2s'}}>
+        <div className="flex items-center mb-6">
+          <div className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg mr-3 animate-pulse"></div>
+          <h2 className="text-2xl font-semibold text-white">Processed Invoices</h2>
+        </div>
         <div className="space-y-4">
           {invoices.length > 0 ? (
-            invoices.map((invoice) => (
+            invoices.map((invoice, index) => (
               <Link
                 to={`/invoices/${invoice._id}`}
                 key={invoice._id}
-                className="block border p-4 rounded-lg hover:bg-gray-50 transition"
+                className="block group"
+                style={{animationDelay: `${index * 0.1}s`}}
               >
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-bold text-lg">
-                      {invoice.parties.supplier.name}
-                    </p>
-                    <p className="text-gray-500">
-                      Invoice #{invoice.metadata.number}
-                    </p>
+                <div className="relative bg-gradient-to-r from-gray-700/30 to-gray-800/30 border border-gray-600/30 p-5 rounded-xl hover:from-gray-600/40 hover:to-gray-700/40 hover:border-gray-500/50 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg animate-fadeInUp backdrop-blur-sm">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="font-bold text-lg text-white group-hover:text-blue-300 transition-colors duration-300">
+                        {invoice.parties.supplier.name}
+                      </p>
+                      <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                        Invoice #{invoice.metadata.number}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-xl text-white group-hover:text-green-300 transition-colors duration-300">
+                        Rs {invoice.amounts.total.toFixed(2)}
+                      </p>
+                      <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                        {new Date(invoice.metadata.date).toLocaleDateString()}
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold text-xl">
-                      Rs {invoice.amounts.total.toFixed(2)}
-                    </p>
-                    <p className="text-gray-500">
-                      {new Date(invoice.metadata.date).toLocaleDateString()}
-                    </p>
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                 </div>
               </Link>
             ))
           ) : (
-            <p>No invoices found. Try processing your emails!</p>
+            <div className="text-center py-12 animate-fadeIn">
+              <div className="w-16 h-16 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <p className="text-gray-400 text-lg">No invoices found. Try processing your emails!</p>
+            </div>
           )}
         </div>
       </div>
     </div>
-  );
-};
+
+    {/* CSS keyframes remain unchanged */}
+    <style jsx>{`
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes slideLeft { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+      @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      .animate-fadeIn { animation: fadeIn 0.6s ease-out; }
+      .animate-slideDown { animation: slideDown 0.6s ease-out; }
+      .animate-slideUp { animation: slideUp 0.6s ease-out; }
+      .animate-slideLeft { animation: slideLeft 0.6s ease-out; }
+      .animate-fadeInUp { animation: fadeInUp 0.4s ease-out; }
+    `}</style>
+  </div>
+</div>
+);
+
+}
+
+
 
 export default Dashboard;

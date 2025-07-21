@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import AuthCallback from "./pages/AuthCallback";
 import InvoiceDetail from "./pages/InvoiceDetail";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/invoices/:id" element={<InvoiceDetail />} />
+          <Route path="/landing" element={<LandingPage />} />
         </Routes>
       </div>
     </Router>
