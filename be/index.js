@@ -8,6 +8,8 @@ const authRoutes = require("./routes/AuthRoutes");
 const invoiceRoutes = require("./routes/InvoiceRoutes");
 const userRoutes = require("./routes/UserRoutes");
 
+const { scheduleDailyInvoiceProcessing } = require("./cron/scheduler");
+
 //Mongoose/MongoDB Integration
 DBConnect();
 
@@ -31,4 +33,7 @@ app.use("/api/user", userRoutes);
 // --- Server Startup ---
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
+
+  scheduleDailyInvoiceProcessing();
+  console.log("Cron job for daily invoice processing has been scheduled.");
 });

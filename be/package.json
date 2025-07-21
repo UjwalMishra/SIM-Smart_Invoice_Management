@@ -22,6 +22,7 @@
     "googleapis": "^153.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.4",
+    "node-cron": "^4.2.1",
     "nodemon": "^3.1.10",
     "pdf-parse": "^1.1.1",
     "sqlite3": "^5.1.7"
