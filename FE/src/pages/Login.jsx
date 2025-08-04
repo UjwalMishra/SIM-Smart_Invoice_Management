@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FaGoogle } from "react-icons/fa";
 import Lottie from "lottie-react";
 import dataAnimation from "../assets/data-animation.json";
+import Navbar from "../components/Navbar";
 
 const Login = () => {
   const BACKEND_AUTH_URL = "http://localhost:3001/auth/google";
@@ -38,19 +39,22 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4 py-8">
+      <div className="">
+        <Navbar />
+      </div>
       <motion.div
-        className="flex flex-col md:flex-row max-w-6xl w-full bg-gray-800 shadow-2xl rounded-2xl overflow-hidden border border-gray-700"
-        style={{ minHeight: '650px' }}
+        className="mt-16 flex flex-col md:flex-row max-w-6xl w-full bg-gray-800 shadow-2xl rounded-2xl overflow-hidden border border-gray-700"
+        style={{ minHeight: "600px" }}
         variants={cardVariants}
         initial="hidden"
         animate="visible"
       >
         {/* Left Side: Lottie Animation */}
         <div className="w-full md:w-1/2 bg-gray-900/60 p-8 flex items-center justify-center">
-          <Lottie 
-            animationData={dataAnimation} 
-            loop={true} 
-            autoplay={true} 
+          <Lottie
+            animationData={dataAnimation}
+            loop={true}
+            autoplay={true}
             className="w-full max-w-md"
           />
         </div>
@@ -64,21 +68,27 @@ const Login = () => {
             Invoice Extractor
           </motion.h1>
 
-          <motion.p
-            className="text-gray-300 text-xl"
-            variants={itemVariants}
-          >
-            Easily convert your unstructured invoices into structured insights using advanced AI.
+          <motion.p className="text-gray-300 text-xl" variants={itemVariants}>
+            Easily convert your unstructured invoices into structured insights
+            using advanced AI.
           </motion.p>
 
           <motion.ul
             className="text-gray-400 text-md space-y-2 pl-5 list-disc"
             variants={itemVariants}
           >
-            <motion.li variants={itemVariants}>Smart data parsing with 98% accuracy</motion.li>
-            <motion.li variants={itemVariants}>Instant Google Sheet Access</motion.li>
-            <motion.li variants={itemVariants}>Secure Google OAuth login</motion.li>
-            <motion.li variants={itemVariants}>Free for monthly usage</motion.li>
+            <motion.li variants={itemVariants}>
+              Smart data parsing with 98% accuracy
+            </motion.li>
+            <motion.li variants={itemVariants}>
+              Instant Google Sheet Access
+            </motion.li>
+            <motion.li variants={itemVariants}>
+              Secure Google OAuth login
+            </motion.li>
+            <motion.li variants={itemVariants}>
+              Free for monthly usage
+            </motion.li>
           </motion.ul>
 
           <motion.a

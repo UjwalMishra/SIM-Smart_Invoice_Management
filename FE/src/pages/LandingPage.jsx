@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FaLinkedin } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import Navbar from "../components/Navbar";
 const LandingPage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -19,7 +20,7 @@ const LandingPage = () => {
   return (
     <div className="bg-[#0f172a] min-h-screen text-white overflow-hidden">
       {/* Animated Navbar */}
-
+      <Navbar />
       {/* Hero Section with Animated Background */}
       <div className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 overflow-hidden">
         {/* Animated Background Elements */}
@@ -44,33 +45,33 @@ const LandingPage = () => {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-4xl text-center">
+        <div className="relative z-10 max-w-4xl text-center" id="hero-section">
           <div className="inline-block mb-6 animate-pulse">
             <span className="text-sm px-4 py-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-full font-medium tracking-wide">
-              ● Intelligent Invoice Processing
+              ● Smart Invoice Processing
             </span>
           </div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-            Automate Your{" "}
+            Automate Your
+            <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-400">
               Invoice
             </span>{" "}
-            <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
               Workflow
             </span>
           </h1>
 
-          <p className="text-xl text-center max-w-2xl mx-auto text-gray-300 mb-10">
-            Eliminate manual work with AI-powered invoice processing that
-            extracts, validates, and approves with unmatched accuracy and
-            efficiency.
+          <p className="text-xl text-center max-w-3xl mx-auto text-gray-300 mb-10">
+            SIM is an AI-powered platform that automates your entire invoice
+            workflow <br /> From email to structured data in Google Sheets, all
+            accessible via a sleek dashboard.
           </p>
 
           <div className="flex flex-wrap gap-4 justify-center mb-10">
             <NavLink to="/login">
-              <button className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-teal-500/25 transition duration-300 transform hover:-translate-y-1">
+              <button className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-teal-500/25 transition duration-300 transform hover:-translate-y-1 cursor-pointer">
                 Get Started
               </button>
             </NavLink>
@@ -78,7 +79,7 @@ const LandingPage = () => {
               onClick={() =>
                 window.open("https://youtu.be/ZQzXRwgfRMk", "_blank")
               }
-              className="bg-gray-900/50 backdrop-blur-sm hover:bg-gray-800 text-white px-8 py-4 rounded-lg font-semibold border border-gray-700 hover:border-teal-500/50 transition duration-300 transform hover:-translate-y-1 flex items-center"
+              className="bg-gray-900/50 backdrop-blur-sm hover:bg-gray-800 text-white px-8 py-4 rounded-lg font-semibold border border-gray-700 hover:border-teal-500/50 transition duration-300 transform hover:-translate-y-1 flex items-center cursor-pointer"
             >
               <span className="mr-2">Watch Demo</span>
               <svg
@@ -136,47 +137,48 @@ const LandingPage = () => {
               Everything You Need
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Our AI-powered platform streamlines your entire invoice workflow
-              from receipt to payment
+              Eliminate manual work with AI-powered invoice processing that
+              extracts, validates, and approves with high accuracy and
+              efficiency.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                title: "Automated Extraction",
-                desc: "Extract data from emails and PDFs automatically with our advanced AI technology.",
-                icon: "📄",
+                title: "Gmail Invoice Fetching",
+                desc: "Automatically scans your Gmail inbox for invoice emails using Google APIs.",
+                icon: "📥",
                 gradient: "from-teal-500 to-cyan-500",
               },
               {
-                title: "Mismatch Detection",
-                desc: "Identify discrepancies instantly with our intelligent validation system.",
-                icon: "✔️",
+                title: "Smart PDF Parsing",
+                desc: "Extracts structured data from invoice PDFs with Gemini (Google AI).",
+                icon: "🧠",
                 gradient: "from-cyan-500 to-blue-500",
               },
               {
-                title: "Approval Automation",
-                desc: "Streamline approvals with customizable workflows and automatic routing.",
-                icon: "⚡",
+                title: "Google Sheets Sync",
+                desc: "Pushes parsed data into your connected Google Sheets in real-time.",
+                icon: "📑",
                 gradient: "from-blue-500 to-indigo-500",
               },
               {
                 title: "Real-time Dashboard",
-                desc: "Monitor processing status and KPIs in a central, intuitive dashboard.",
+                desc: "View, filter, and manage all your fetched invoices with a clean UI.",
                 icon: "📊",
                 gradient: "from-indigo-500 to-purple-500",
               },
               {
-                title: "Secure Storage",
-                desc: "Store all your invoice data with enterprise-grade encryption and compliance.",
-                icon: "🔒",
+                title: "Secure by Design",
+                desc: "Powered by Google OAuth2 with strong encryption and data privacy controls.",
+                icon: "🔐",
                 gradient: "from-purple-500 to-pink-500",
               },
               {
-                title: "Seamless Integration",
-                desc: "Connect with your existing accounting and ERP systems effortlessly.",
-                icon: "➡️",
+                title: "Daily Auto Sync",
+                desc: "A background cron job ensures your data stays updated every day.",
+                icon: "⏱️",
                 gradient: "from-pink-500 to-teal-500",
               },
             ].map((feature, idx) => (
@@ -184,7 +186,6 @@ const LandingPage = () => {
                 key={idx}
                 className="group relative bg-[#0f1e30] border border-white/10 rounded-xl p-8 overflow-hidden transition-all duration-700 hover:shadow-2xl hover:shadow-teal-500/10 hover:border-teal-500/30 hover:-translate-y-2"
               >
-                {/* Gradient Background on Hover */}
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-700`}
                 ></div>
@@ -196,36 +197,11 @@ const LandingPage = () => {
                   {feature.title}
                 </h3>
                 <p className="text-gray-300">{feature.desc}</p>
-
-                {/* Learn More Button */}
-                <div className="mt-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                  <a
-                    href="#"
-                    className="text-teal-400 font-medium inline-flex items-center"
-                  >
-                    Learn more
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="w-4 h-4 ml-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </a>
-                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
-
       {/* How It Works Section with 3D Effect */}
       <div
         id="how-it-works"
@@ -256,8 +232,8 @@ const LandingPage = () => {
             {[
               {
                 step: "01",
-                title: "Capture",
-                desc: "Automatically collect invoices from emails and documents",
+                title: "Fetch",
+                desc: "Connect your Gmail to automatically fetch invoices from your inbox using the Gmail API.",
                 icon: (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -270,15 +246,15 @@ const LandingPage = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={1.5}
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                     />
                   </svg>
                 ),
               },
               {
                 step: "02",
-                title: "Process",
-                desc: "Extract data and validate against your business rules",
+                title: "Parse",
+                desc: "SIM uses Gemini AI to intelligently extract structured data from invoice PDFs.",
                 icon: (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -298,8 +274,8 @@ const LandingPage = () => {
               },
               {
                 step: "03",
-                title: "Approve",
-                desc: "Route for approval and integrate with your payment systems",
+                title: "Sync & Manage",
+                desc: "Parsed data is synced to your Google Sheets and shown on a clean, real-time dashboard.",
                 icon: (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -381,7 +357,7 @@ const LandingPage = () => {
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <NavLink to="/login">
-                    <button className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-teal-500/25 transition duration-300 transform hover:-translate-y-1 flex items-center">
+                    <button className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-teal-500/25 transition duration-300 transform hover:-translate-y-1 flex items-center cursor-pointer">
                       Start Your Free Trial
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -403,7 +379,7 @@ const LandingPage = () => {
                     onClick={() =>
                       window.open("https://youtu.be/ZQzXRwgfRMk", "_blank")
                     }
-                    className="bg-gray-900/50 backdrop-blur-sm hover:bg-gray-800 text-white px-8 py-4 rounded-lg font-semibold border border-gray-700 hover:border-teal-500/50 transition duration-300 transform hover:-translate-y-1"
+                    className="bg-gray-900/50 backdrop-blur-sm hover:bg-gray-800 text-white px-8 py-4 rounded-lg font-semibold border border-gray-700 hover:border-teal-500/50 transition duration-300 transform hover:-translate-y-1 cursor-pointer"
                   >
                     Watch Demo
                   </button>
@@ -514,47 +490,48 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-      <footer className="w-full bg-[#0f172a] py-8 px-6 border-t border-gray-700 ">
+      {/* footer  */}
+      <footer className="w-full bg-[#0f172a] py-8 px-6 border-t border-gray-700">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Company Info */}
+          {/* SIM Info */}
           <div>
-            <h3 className="text-xl font-semibold text-white mb-4">InvoiceAI</h3>
+            <h3 className="text-xl font-semibold text-white mb-4">SIM</h3>
             <p className="text-gray-300 mb-6">
-              Automate your invoice processing with SmartInvoice extraction,
-              validation, and approval workflows. Save time, reduce errors, and
-              gain insights.
+              Smart Invoice Management (SIM) automates invoice extraction from
+              Gmail, parses them using Gemini AI, and syncs structured data to
+              Google Sheets, all in one smooth dashboard.
             </p>
             <div className="flex space-x-4">
               <a
                 href="https://www.linkedin.com/in/ujwalmishra/"
                 target="_blank"
+                rel="noreferrer"
                 className="text-gray-400 hover:text-white"
               >
-                {/* LinkedIn Icon */}
                 <FaLinkedin className="text-2xl" />
               </a>
               <a
                 href="https://x.com/mishrax_"
                 target="_blank"
+                rel="noreferrer"
                 className="text-gray-400 hover:text-white"
               >
-                {/* Twitter Icon */}
                 <FaXTwitter className="text-2xl" />
               </a>
               <a
-                href="https://github.com/UjwalMishra"
+                href="https://github.com/UjwalMishra/Smart-Invoice-Management"
                 target="_blank"
+                rel="noreferrer"
                 className="text-gray-400 hover:text-white"
               >
-                {/* GitHub Icon */}
                 <FaGithub className="text-2xl" />
               </a>
               <a
                 href="https://www.youtube.com/watch?v=ZQzXRwgfRMk"
                 target="_blank"
+                rel="noreferrer"
                 className="text-gray-400 hover:text-white"
               >
-                {/* YouTube Icon */}
                 <FaYoutube className="text-2xl" />
               </a>
             </div>
@@ -565,18 +542,26 @@ const LandingPage = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Product</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-300 hover:text-white">
+                <a href="#features" className="text-gray-300 hover:text-white">
                   Features
                 </a>
               </li>
-
               <li>
                 <a
-                  href="https://github.com/UjwalMishra/Smart-Invoice-Management"
-                  target="_blank"
+                  href="#how-it-works"
                   className="text-gray-300 hover:text-white"
                 >
-                  Documentation
+                  How It Works
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/UjwalMishra/SIM-Smart_Invoice_Management"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-gray-300 hover:text-white"
+                >
+                  GitHub Repo
                 </a>
               </li>
             </ul>
@@ -588,7 +573,7 @@ const LandingPage = () => {
             <ul className="space-y-2">
               <li>
                 <a href="/aboutus" className="text-gray-300 hover:text-white">
-                  About Us
+                  About
                 </a>
               </li>
               <li>
@@ -597,14 +582,14 @@ const LandingPage = () => {
                 </a>
               </li>
               <li>
-                <a href="/signup" className="text-gray-300 hover:text-white">
-                  Signup
+                <a href="/dashboard" className="text-gray-300 hover:text-white">
+                  Dashboard
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Resources Links */}
+          {/* Resources */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">Resources</h3>
             <ul className="space-y-2">
@@ -620,32 +605,29 @@ const LandingPage = () => {
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-white">
-                  Webinars
+                  Privacy Policy
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-300 hover:text-white">
-                  Privacy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-white">
-                  Terms
+                  Terms of Service
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Copyright and Legal */}
+        {/* Copyright */}
         <div className="mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
-          <p>&copy; 2025 SmartInvoice. All rights reserved.</p>
+          <p>
+            &copy; 2025 SIM – Smart Invoice Management. All rights reserved.
+          </p>
           <div className="mt-4 space-x-4">
             <a href="#" className="text-gray-400 hover:text-white">
-              Privacy Policy
+              Privacy
             </a>
             <a href="#" className="text-gray-400 hover:text-white">
-              Terms of Service
+              Terms
             </a>
             <a href="#" className="text-gray-400 hover:text-white">
               Cookie Policy

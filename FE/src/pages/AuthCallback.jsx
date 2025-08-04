@@ -1,5 +1,6 @@
 // src/pages/AuthCallback.jsx
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const AuthCallback = () => {
@@ -12,10 +13,10 @@ const AuthCallback = () => {
 
     if (token) {
       localStorage.setItem("authToken", token);
-      navigate("/");
+      toast.success("Successfully logged in!");
+      navigate("/dashboard");
     } else {
-      // Handle login failure
-      navigate("/login");
+      navigate("/");
     }
   }, [location, navigate]);
 
