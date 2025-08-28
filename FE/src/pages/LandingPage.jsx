@@ -34,11 +34,15 @@ const LandingPage = () => {
                 height: `${Math.random() * 300 + 50}px`,
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
-                animationDuration: `${Math.random() * 50 + 20}s`,
-                animationDelay: `${Math.random() * 5}s`,
                 opacity: Math.random() * 0.5,
                 transform: `scale(${Math.random() * 0.8 + 0.2})`,
-                animation: "float 30s infinite ease-in-out",
+
+                // ✅ Use longhands only
+                animationName: "float",
+                animationDuration: `${Math.random() * 50 + 20}s`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationIterationCount: "infinite",
+                animationTimingFunction: "ease-in-out",
               }}
             />
           ))}

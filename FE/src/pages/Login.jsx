@@ -1,5 +1,3 @@
-// src/pages/Login.jsx
-import React from "react";
 import { motion } from "framer-motion";
 import { FaGoogle } from "react-icons/fa";
 import Lottie from "lottie-react";
@@ -7,7 +5,7 @@ import dataAnimation from "../assets/data-animation.json";
 import Navbar from "../components/Navbar";
 
 const Login = () => {
-  const BACKEND_AUTH_URL = "http://localhost:3001/auth/google";
+  const BACKEND_AUTH_URL = import.meta.env.VITE_BACKEND_AUTH_URL;
 
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.95 },
