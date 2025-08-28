@@ -1,5 +1,3 @@
-// services/googleSheetsService.js
-
 const { google } = require("googleapis");
 
 const getSheetsClient = (oAuth2Client) => {

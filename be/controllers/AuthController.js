@@ -1,5 +1,3 @@
-// controllers/authController.js
-
 const jwt = require("jsonwebtoken");
 const { google } = require("googleapis");
 const User = require("../model/User");

@@ -1,5 +1,3 @@
-// controllers/invoiceController.js
-
 const Invoice = require("../model/Invoice");
 const gmailApiServices = require("../services/gmailApiServices");
 const invoiceProcessorService = require("../services/invoiceProcessorService");

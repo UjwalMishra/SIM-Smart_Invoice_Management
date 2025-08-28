@@ -1,5 +1,3 @@
-// cron/scheduler.js
-
 const cron = require("node-cron");
 const User = require("../model/User");
 const { processInvoicesForUser } = require("../services/automatedTaskService");
